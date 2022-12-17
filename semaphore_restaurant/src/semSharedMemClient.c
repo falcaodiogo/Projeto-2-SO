@@ -167,6 +167,12 @@ static bool waitFriends(int id)
     }
 
     /* insert your code here */
+    sh->fSt.tableFirst = id;
+    saveState(nFic,&sh->fSt);  // Saves the id of the first client to arrive
+    first = true;
+    sh->fSt.st.clientStat[id] = WAIT_FOR_FRIENDS;
+    
+    
 
     if (semUp (semgid, sh->mutex) == -1)                                                      /* exit critical region */
     { perror ("error on the up operation for semaphore access (CT)");
@@ -174,6 +180,9 @@ static bool waitFriends(int id)
     }
 
     /* insert your code here */
+
+
+
 
     return first;
 }

@@ -150,7 +150,10 @@ static int waitForClientOrChef()
     }
 
     /* insert your code here */
-    
+    sh->fSt.st.waiterStat = WAIT_FOR_REQUEST;
+    saveState(nFic,&sh->fSt);
+
+
     if (semUp (semgid, sh->mutex) == -1)      {                                             /* exit critical region */
         perror ("error on the down operation for semaphore access (WT)");
         exit (EXIT_FAILURE);
