@@ -43,7 +43,7 @@
 /**
  *  \brief Main program.
  *
- *  Its role is starting the simulation by generating the intervening entities processes (pilot, hostess and passengers)
+ *  Its role is starting the simulation by generating the intervening entities processes (chef, waiter and clients)
  *  and waiting for their termination.
  */
 int main (int argc, char *argv[])
