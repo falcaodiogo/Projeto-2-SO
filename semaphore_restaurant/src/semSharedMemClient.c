@@ -182,8 +182,6 @@ static bool waitFriends(int id)
     /* insert your code here */
 
 
-
-
     return first;
 }
 
@@ -205,7 +203,13 @@ static void orderFood (int id)
         exit (EXIT_FAILURE);
     }
 
-    /* insert your code here */
+    // /* insert your code here */
+    // sh->fSt.st.clientStat[id] = ORDER_FOOD;
+    // saveState(nFic,&sh->fSt);  // Saves the state of the first client to arrive
+    // semUp(semgid,sh->waiter); // Signals the waiter that the first client has arrived
+    // semDown(semgid,sh->waiter); // Waits for the waiter to receive the order
+    // semUp(semgid,sh->waiter); // Signals the waiter that the first client has received the order
+
 
     if (semUp (semgid, sh->mutex) == -1)                                                      /* exit critical region */
     { perror ("error on the up operation for semaphore access (CT)");
