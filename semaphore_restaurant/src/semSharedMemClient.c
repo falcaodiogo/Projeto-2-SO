@@ -231,7 +231,7 @@ static void orderFood (int id)
 static void waitFood (int id)
 {
 
-    if (semDown (semgid, sh->mutex) == -1) {                                                  /* enter critical region */ 
+    if (semDown (semgid, sh->mutex) == -1) {                                                  /* enter critical region */
         perror ("error on the down operation for semaphore access (CT)");
         exit (EXIT_FAILURE);
     }
