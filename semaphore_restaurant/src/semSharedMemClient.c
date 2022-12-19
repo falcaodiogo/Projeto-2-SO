@@ -203,7 +203,7 @@ static void orderFood (int id)
         exit (EXIT_FAILURE);
     }
 
-    // /* insert your code here */
+    // /* insert your code here */ // -> depois do primeiro confirmar que todos chegaram, faz o pedido
     // sh->fSt.st.clientStat[id] = ORDER_FOOD;
     // saveState(nFic,&sh->fSt);  // Saves the state of the first client to arrive
     // semUp(semgid,sh->waiter); // Signals the waiter that the first client has arrived
