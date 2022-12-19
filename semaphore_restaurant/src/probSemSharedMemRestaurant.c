@@ -76,6 +76,10 @@ int main (int argc, char *argv[])
     }
     sprintf (num[1], "%d", key);
 
+    //destroy 
+    shmemDestroy(shmemConnect(key));
+    semDestroy(semConnect(key));
+
     /* creating and initializing the shared memory region and the log file */
     if ((shmid = shmemCreate (key, sizeof (SHARED_DATA))) == -1) { 
         perror ("error on creating the shared memory region");
