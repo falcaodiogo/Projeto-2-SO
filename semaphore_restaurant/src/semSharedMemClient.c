@@ -42,7 +42,7 @@ static int shmid;
 static int semgid;
 
 /** \brief pointer to shared memory region */
-static SHARED_DATA *sh;
+static SHARED_DATA *sh; 
 
 static bool waitFriends (int id);
 static void orderFood (int id);
@@ -128,7 +128,7 @@ int main (int argc, char *argv[])
  *
  *  \param id client id
  */
-static void travel (int id)
+static void travel (int id) 
 {
     usleep((unsigned int) floor ((1000000 * random ()) / RAND_MAX + 1000));
 }
@@ -167,20 +167,27 @@ static bool waitFriends(int id)
     }
 
     /* insert your code here */
-    sh->fSt.tableFirst = id;
-    saveState(nFic,&sh->fSt);  // Saves the id of the first client to arrive
-    first = true;
-    sh->fSt.st.clientStat[id] = WAIT_FOR_FRIENDS;
-    
-    
 
-    if (semUp (semgid, sh->mutex) == -1)                                                      /* exit critical region */
+    sh->fSt.tableFirst = id;
+    sh->fSt.st.clientStat[id] = WAIT_FOR_FRIENDS;   // muda a primeira pessoa a chegar para WAIT_FOR_FRIENDS
+    saveState(nFic,&sh->fSt);  
+
+    sh->fSt.tableClients++;     
+
+    // ver se é a primeira pessoa a chegar
+    if(sh->fSt.tableClients == 1){
+        first = true;
+    } 
+
+    if (semUp (semgid, sh->mutex) == -1)                                            /* exit critical region */
     { perror ("error on the up operation for semaphore access (CT)");
         exit (EXIT_FAILURE);
     }
 
     /* insert your code here */
 
+    
+    
 
     return first;
 }
