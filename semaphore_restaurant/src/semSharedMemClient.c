@@ -168,7 +168,7 @@ static bool waitFriends(int id)
 
     /* insert your code here */
 
-    sh->fSt.tableFirst = id;
+    // sh->fSt.tableFirst = id;
     sh->fSt.st.clientStat[id] = WAIT_FOR_FRIENDS;   // muda a primeira pessoa a chegar para WAIT_FOR_FRIENDS
     saveState(nFic,&sh->fSt);  
 
@@ -177,7 +177,12 @@ static bool waitFriends(int id)
     // ver se é a primeira pessoa a chegar
     if(sh->fSt.tableClients == 1){
         first = true;
+        sh->fSt.tableFirst = id;
     } 
+    
+    if(sh->fSt.tableClients == TABLESIZE) {
+        sh->fSt.tableLast = id;
+    }
 
     if (semUp (semgid, sh->mutex) == -1)                                            /* exit critical region */
     { perror ("error on the up operation for semaphore access (CT)");
