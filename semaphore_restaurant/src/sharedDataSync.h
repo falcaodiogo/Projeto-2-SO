@@ -28,19 +28,19 @@ typedef struct
           FULL_STAT fSt;
 
           /* semaphores ids */
-          /** \brief identification of critical region protection semaphore – val = 1 */
+          /** \brief identification of critical region protection semaphore - val = 1 */
           unsigned int mutex;
           /** \brief identification of semaphore used by clients to wait for friends to arrive - val = 0 */
           unsigned int friendsArrived;
-          /** \brief identification of semaphore used by client to wait for waiter after a request – val = 0 */
+          /** \brief identification of semaphore used by client to wait for waiter after a request - val = 0 */
           unsigned int requestReceived;
-          /** \brief identification of semaphore used by clients to wait for food – val = 0 */
+          /** \brief identification of semaphore used by clients to wait for food - val = 0 */
           unsigned int foodArrived;
-          /** \brief identification of semaphore used by clients to wait for friends to finish eating – val = 0  */
+          /** \brief identification of semaphore used by clients to wait for friends to finish eating - val = 0  */
           unsigned int allFinished;
-          /** \brief identification of semaphore used by waiter to wait for requests – val = 0  */
+          /** \brief identification of semaphore used by waiter to wait for requests - val = 0  */
           unsigned int waiterRequest;
-          /** \brief identification of semaphore used by chef to wait for order – val = 0  */
+          /** \brief identification of semaphore used by chef to wait for order - val = 0  */
           unsigned int waitOrder;
 
         } SHARED_DATA;
