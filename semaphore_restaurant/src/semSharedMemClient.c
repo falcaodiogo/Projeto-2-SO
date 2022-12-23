@@ -168,9 +168,12 @@ static bool waitFriends(int id)
 
     /* insert your code here */
 
+    //!!!!!!!!!!!!!!
+    // Dividir em 2-> naquilo que necessita de estar dentro ou fora da regiã ciritica
+
     // sh->fSt.tableFirst = id;
     sh->fSt.st.clientStat[id] = WAIT_FOR_FRIENDS;   // muda a primeira pessoa a chegar para WAIT_FOR_FRIENDS
-    saveState(nFic,&sh->fSt);  
+    saveState(nFic,&sh->fSt);
 
     sh->fSt.tableClients++;     
 
@@ -191,8 +194,6 @@ static bool waitFriends(int id)
 
     /* insert your code here */
 
-    
-    
 
     return first;
 }
@@ -216,6 +217,11 @@ static void orderFood (int id)
     }
 
     // /* insert your code here */ // -> depois do primeiro confirmar que todos chegaram, faz o pedido
+
+    if (TABLESIZE == 20)
+    {
+
+    }
     // sh->fSt.st.clientStat[id] = ORDER_FOOD;
     // saveState(nFic,&sh->fSt);  // Saves the state of the first client to arrive
     // semUp(semgid,sh->waiter); // Signals the waiter that the first client has arrived
