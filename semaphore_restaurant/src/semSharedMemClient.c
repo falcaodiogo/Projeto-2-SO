@@ -166,34 +166,42 @@ static bool waitFriends(int id)
         exit (EXIT_FAILURE);
     }
 
+    if (semUp (semgid, sh->friendsArrived) == -1) {
+        perror ("error on the down operation for semaphore access (CT)");
+        exit (EXIT_FAILURE);
+    }
+
     /* insert your code here */
+    sh->fSt.tableClients++;
 
-    //!!!!!!!!!!!!!!
-    // Dividir em 2-> naquilo que necessita de estar dentro ou fora da regiã ciritica
-
-    // sh->fSt.tableFirst = id;
-    sh->fSt.st.clientStat[id] = WAIT_FOR_FRIENDS;   // muda a primeira pessoa a chegar para WAIT_FOR_FRIENDS
+    sh->fSt.st.clientStat[id] = WAIT_FOR_FRIENDS;   // muda o estado da primeira pessoa a chegar para WAIT_FOR_FRIENDS
     saveState(nFic,&sh->fSt);
 
-    sh->fSt.tableClients++;     
-
     // ver se é a primeira pessoa a chegar
-    if(sh->fSt.tableClients == 1){
+    if(sh->fSt.tableClients == 1)
+    {
         first = true;
         sh->fSt.tableFirst = id;
     } 
-    
-    if(sh->fSt.tableClients == TABLESIZE) {
-        sh->fSt.tableLast = id;
-    }
 
+    // ver se é a última pessoa a chegar
+    if(sh->fSt.tableClients == TABLESIZE) 
+    {
+        sh->fSt.tableLast = id;
+        printf("N amigos: %d\n", sh->fSt.tableClients);
+        
+        if (semDown (semgid, sh->friendsArrived) == -1) {
+            perror ("error on the down operation for semaphore access (CT)");
+            exit (EXIT_FAILURE);
+        }
+    }
+    
     if (semUp (semgid, sh->mutex) == -1)                                            /* exit critical region */
     { perror ("error on the up operation for semaphore access (CT)");
         exit (EXIT_FAILURE);
     }
 
     /* insert your code here */
-
 
     return first;
 }
@@ -211,7 +219,8 @@ static bool waitFriends(int id)
  */
 static void orderFood (int id)
 {
-    if (semDown (semgid, sh->mutex) == -1) {                                                  /* enter critical region */
+    if (semDown (semgid, sh->mutex) == -1) 
+    {                                                  /* enter critical region */
         perror ("error on the down operation for semaphore access (CT)");
         exit (EXIT_FAILURE);
     }
