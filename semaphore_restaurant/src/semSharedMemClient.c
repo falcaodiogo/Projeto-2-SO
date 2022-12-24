@@ -232,6 +232,12 @@ static void orderFood (int id)
         sh->fSt.st.clientStat[sh->fSt.tableFirst] = FOOD_REQUEST;
         saveState(nFic,&sh->fSt);
     }
+
+    if (sh->fSt.foodRequest == 1)
+    {
+        sh->fSt.st.clientStat[sh->fSt.tableFirst] = WAIT_FOR_FOOD;
+        saveState(nFic,&sh->fSt);
+    }
     
     if (semUp (semgid, sh->mutex) == -1)                                                      /* exit critical region */
     { 
