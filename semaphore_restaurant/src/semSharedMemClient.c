@@ -189,6 +189,7 @@ static bool waitFriends(int id)
     {
         sh->fSt.tableLast = id;    // Guarda o id do último cliente que chegou
         sh->fSt.foodOrder = 1;     // Informa que já chegaram todos os clientes à mesa pondo a flag para pedir comida a 1
+        first = true;
         saveState(nFic,&sh->fSt);  // Guarda o estado do cliente que acabou de chegar
     } 
     
@@ -227,15 +228,10 @@ static void orderFood (int id)
     }
 
     // /* insert your code here */ // -> depois do primeiro confirmar que todos chegaram, faz o pedido
+    id = sh->fSt.tableFirst;
     if (sh->fSt.foodOrder == 1)   // Verifica se o primeiro cliente confirmou a chegada de todos os seus amigos
     {
-        sh->fSt.st.clientStat[sh->fSt.tableFirst] = FOOD_REQUEST;
-        saveState(nFic,&sh->fSt);
-    }
-
-    if (sh->fSt.foodRequest == 1)
-    {
-        sh->fSt.st.clientStat[sh->fSt.tableFirst] = WAIT_FOR_FOOD;
+        sh->fSt.st.clientStat[id] = FOOD_REQUEST;
         saveState(nFic,&sh->fSt);
     }
     
