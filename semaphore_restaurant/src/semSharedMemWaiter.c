@@ -150,9 +150,24 @@ static int waitForClientOrChef()
     }
 
     /* insert your code here */
-    sh->fSt.st.waiterStat = WAIT_FOR_REQUEST;
-    saveState(nFic,&sh->fSt);
+    if (sh->fSt.foodRequest == 1)  // Se os clientes estiverem prontos para pedir 
+    {
+        sh->fSt.st.waiterStat = WAIT_FOR_REQUEST;
+        ret = FOODREQ;
+        saveState(nFic,&sh->fSt);
 
+        if (semDown (semgid, sh->waiterRequest) == -1)
+        {
+            perror ("error on the down operation for semaphore access (WT)");
+            exit (EXIT_FAILURE); 
+        }
+    }
+    
+    if (semUp (semgid, sh->requestReceived) == -1)
+    {
+        perror ("error on the down operation for semaphore access (WT)");
+        exit (EXIT_FAILURE); 
+    }
 
     if (semUp (semgid, sh->mutex) == -1)      {                                             /* exit critical region */
         perror ("error on the down operation for semaphore access (WT)");

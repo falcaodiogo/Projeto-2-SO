@@ -169,40 +169,38 @@ static bool waitFriends(int id)
     /* insert your code here */
     sh->fSt.tableClients++;  // Incrementa o número de clientes que chegaram à mesa, cada vez que entrar um cliente
     sh->fSt.st.clientStat[id] = WAIT_FOR_FRIENDS;   // muda o estado para WAIT_FOR_FRIENDS
-    saveState(nFic,&sh->fSt);  // Guarda o estado do cliente que acabou de chegar
-
-    if (semUp (semgid, sh->friendsArrived) == -1) {
-        perror ("error on the up operation for semaphore access (CT)");
-        exit (EXIT_FAILURE);
-    }
 
     // ver se é a primeira pessoa a chegar
     if(sh->fSt.tableClients == 1)
     {
         first = true;
         sh->fSt.tableFirst = id;  // Guarda o id do primeiro cliente que chegou
-        saveState(nFic,&sh->fSt); // Guarda o estado do cliente que acabou de chegar
     } 
 
     // ver se é a última pessoa a chegar
     if(sh->fSt.tableClients == TABLESIZE) 
     {
         sh->fSt.tableLast = id;    // Guarda o id do último cliente que chegou
-        sh->fSt.foodOrder = 1;     // Informa que já chegaram todos os clientes à mesa pondo a flag para pedir comida a 1
-        first = true;
-        saveState(nFic,&sh->fSt);  // Guarda o estado do cliente que acabou de chegar
-    } 
-    
+    }
+
+    saveState(nFic,&(sh->fSt));
+    printf("%d\n",first);
     if (semUp (semgid, sh->mutex) == -1)                                            /* exit critical region */
-    { perror ("error on the up operation for semaphore access (CT)");
+    { 
+        perror ("error on the up operation for semaphore access (CT)");
         exit(EXIT_FAILURE);
     }
 
     /* insert your code here */
-    if (semDown (semgid, sh->friendsArrived) == -1) 
+    if (id != sh->fSt.tableLast) // Se não for o último cliente
     {
-        perror ("error on the down operation for semaphore access (CT)");
-        exit (EXIT_FAILURE);
+        semDown(semgid, sh->friendsArrived); // Adormecer os clientes
+    }
+
+    if (id == sh->fSt.tableLast) // Se for o último cliente
+    {
+        for (int i = 0 ; i < TABLESIZE - 1 ; i++)
+            semUp(semgid, sh->friendsArrived);  // Desbloquear os clientes que já chegaram 
     }
 
     return first;
@@ -227,14 +225,16 @@ static void orderFood (int id)
         exit (EXIT_FAILURE);
     }
 
-    // /* insert your code here */ // -> depois do primeiro confirmar que todos chegaram, faz o pedido
-    id = sh->fSt.tableFirst;
-    if (sh->fSt.foodOrder == 1)   // Verifica se o primeiro cliente confirmou a chegada de todos os seus amigos
+    /* insert your code here */ 
+    if (sh->fSt.tableFirst == id)
     {
-        sh->fSt.st.clientStat[id] = FOOD_REQUEST;
+        sh->fSt.st.clientStat[id] == FOOD_REQUEST;  // Update the state of the client to Food_Request
+        sh->fSt.foodRequest++;   // Adiciona um pedido 
+
+        semUp(semgid, sh->waitOrder);
         saveState(nFic,&sh->fSt);
     }
-    
+
     if (semUp (semgid, sh->mutex) == -1)                                                      /* exit critical region */
     { 
         perror ("error on the up operation for semaphore access (CT)");
@@ -242,6 +242,12 @@ static void orderFood (int id)
     }
 
     /* insert your code here */
+
+    if(semDown (semgid, sh->requestReceived) == -1)
+    {
+        perror ("error on the down operation for the semaphore access (CT)");
+        exit (EXIT_FAILURE);
+    }
 }
 
 /**
