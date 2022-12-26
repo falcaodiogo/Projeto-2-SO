@@ -184,7 +184,7 @@ static bool waitFriends(int id)
     }
 
     saveState(nFic,&(sh->fSt));
-    printf("%d\n",first);
+
     if (semUp (semgid, sh->mutex) == -1)                                            /* exit critical region */
     { 
         perror ("error on the up operation for semaphore access (CT)");
@@ -226,13 +226,14 @@ static void orderFood (int id)
     }
 
     /* insert your code here */ 
-    if (sh->fSt.tableFirst == id)
+    if (id == sh->fSt.tableFirst)  // Verifica se é o id do primeiro cliente
     {
         sh->fSt.st.clientStat[id] == FOOD_REQUEST;  // Update the state of the client to Food_Request
         sh->fSt.foodRequest++;   // Adiciona um pedido 
+        printf("%d\n",sh->fSt.foodRequest);
 
-        semUp(semgid, sh->waitOrder);
-        saveState(nFic,&sh->fSt);
+        semUp(semgid, sh->waiterRequest); // Acorda o empregado
+        saveState(nFic,&(sh->fSt));
     }
 
     if (semUp (semgid, sh->mutex) == -1)                                                      /* exit critical region */
@@ -243,11 +244,7 @@ static void orderFood (int id)
 
     /* insert your code here */
 
-    if(semDown (semgid, sh->requestReceived) == -1)
-    {
-        perror ("error on the down operation for the semaphore access (CT)");
-        exit (EXIT_FAILURE);
-    }
+    // semDown(semgid, sh->requestReceived);
 }
 
 /**
