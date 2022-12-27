@@ -161,6 +161,11 @@ static void processOrder ()
 
     /* insert your code here */
 
+    // if (semUp (semgid, sh->foodReady) == -1) {                                                      /* exit critical region */
+    //     perror ("error on the up operation for semaphore access (PT)");
+    //     exit (EXIT_FAILURE);
+    // } //erro? foodReady não exist??
+
     sh->fSt.st.chefStat = COOK;
     saveState(nFic,&sh->fSt);
 
