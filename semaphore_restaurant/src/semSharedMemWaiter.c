@@ -203,10 +203,9 @@ static void informChef ()
     /* insert your code here */
 
     sh->fSt.st.waiterStat = INFORM_CHEF;
+    sh->fSt.foodOrder++;  // Increments the foodOrder
     saveState(nFic, &(sh->fSt));
-
     sh->fSt.foodRequest = 0; // Resets the flag foodRequest to 0 (??)
-
 
     if (semUp (semgid, sh->mutex) == -1)                                                   /* exit critical region */
     { perror ("error on the down operation for semaphore access (WT)");
@@ -215,6 +214,7 @@ static void informChef ()
 
     /* insert your code here */
     semUp(semgid,sh->waitOrder); // Wakes up the chef
+
 }
 
 /**
@@ -232,8 +232,11 @@ static void takeFoodToTable ()
     }
 
     /* insert your code here */
-    sh->fSt.st.waiterStat = TAKE_TO_TABLE;
-    saveState(nFic, &(sh->fSt));
+    if(sh->fSt.foodReady == 1)  // If chef has finished cooking
+    {
+        sh->fSt.st.waiterStat = TAKE_TO_TABLE;
+        saveState(nFic, &(sh->fSt));
+    }
     
     if (semUp (semgid, sh->mutex) == -1)  {                                                  /* exit critical region */
      perror ("error on the down operation for semaphore access (WT)");
@@ -256,9 +259,12 @@ static void receivePayment ()
     }
 
     /* insert your code here */
-    sh->fSt.st.waiterStat = RECEIVE_PAYMENT;
-    saveState(nFic, &(sh->fSt));
-
+    if(sh->fSt.paymentRequest == 1)  // If the flag paymentRequest has been raised (changed from 0 to 1
+    {
+        sh->fSt.st.waiterStat = RECEIVE_PAYMENT;
+        saveState(nFic, &(sh->fSt));
+    }
+    
     if (semUp (semgid, sh->mutex) == -1)  {                                                  /* exit critical region */
      perror ("error on the down operation for semaphore access (WT)");
         exit (EXIT_FAILURE);

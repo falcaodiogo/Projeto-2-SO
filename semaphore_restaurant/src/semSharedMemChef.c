@@ -117,14 +117,10 @@ static void waitForOrder ()
 {
     /* insert your code here */
 
-    if (semUp (semgid, sh->waitOrder) == -1) {                                                      /* exit critical region */
+    if (semUp (semgid, sh->waitOrder) == -1) {                         
         perror ("error on the up operation for semaphore access (PT)");
         exit (EXIT_FAILURE);
     }
-
-    sh->fSt.st.chefStat = WAIT_FOR_ORDER;
-    saveState(nFic,&sh->fSt);  
-
 
     if (semDown (semgid, sh->mutex) == -1) {                                                      /* enter critical region */
         perror ("error on the up operation for semaphore access (PT)");
@@ -132,8 +128,10 @@ static void waitForOrder ()
     }
 
     /* insert your code here */
+    sh->fSt.st.chefStat = WAIT_FOR_ORDER;
+    saveState(nFic,&sh->fSt);  
 
-    if (semDown (semgid, sh->waitOrder) == -1) {                                                      /* enter critical region */
+    if (semDown (semgid, sh->waitOrder) == -1) {                                             
         perror ("error on the up operation for semaphore access (PT)");
         exit (EXIT_FAILURE);
     }
@@ -161,13 +159,12 @@ static void processOrder ()
 
     /* insert your code here */
 
-    // if (semUp (semgid, sh->foodReady) == -1) {                                                      /* exit critical region */
-    //     perror ("error on the up operation for semaphore access (PT)");
-    //     exit (EXIT_FAILURE);
-    // } //erro? foodReady não exist??
-
-    sh->fSt.st.chefStat = COOK;
-    saveState(nFic,&sh->fSt);
+    if(sh->fSt.st.waiterStat == TAKE_TO_TABLE)
+    {
+        sh->fSt.st.chefStat = COOK;  // Changes the internal state of the chef to COOK
+        saveState(nFic,&(sh->fSt));   
+        sh->fSt.foodReady++;  // Signals the waiter that the food is ready
+    }
 
     if (semUp (semgid, sh->mutex) == -1) {                                                      /* exit critical region */
         perror ("error on the up operation for semaphore access (PT)");
@@ -175,5 +172,7 @@ static void processOrder ()
     }
 
     /* insert your code here */
+    sh->fSt.st.chefStat = REST;  // Changes the internal state of the chef to REST
+    saveState(nFic,&(sh->fSt));
 }
 
