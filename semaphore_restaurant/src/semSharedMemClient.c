@@ -228,11 +228,10 @@ static void orderFood (int id)
     /* insert your code here */ 
     if (id == sh->fSt.tableFirst)  // Verifica se é o id do primeiro cliente
     {
-        sh->fSt.st.clientStat[id] == FOOD_REQUEST;  // Update the state of the client to Food_Request
+        sh->fSt.st.clientStat[id] = FOOD_REQUEST;  // Update the state of the client to Food_Request
         sh->fSt.foodRequest++;   // Adiciona um pedido 
-        printf("%d\n",sh->fSt.foodRequest);
 
-        semUp(semgid, sh->waiterRequest); // Acorda o empregado
+        semUp(semgid, sh->waiterRequest); // Waiter receives the request (wakes up the waiter)
         saveState(nFic,&(sh->fSt));
     }
 
