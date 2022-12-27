@@ -40,12 +40,12 @@ typedef struct
     STAT st;
 
     /** \brief number of clients at table */
-    int tableClients;
+    int tableClients; // = 0
     /** \brief number of clients that finished eating */
     int tableFinishEat;
 
     /** \brief flag of food request from client to waiter */
-    int foodRequest;
+    int foodRequest; 
     /** \brief flag of food order from waiter to chef */
     int foodOrder;
     /** \brief flag of food ready from chef to waiter */

@@ -143,7 +143,8 @@ int main (int argc, char *argv[])
  */
 static int waitForClientOrChef()
 {
-    int ret=0; 
+    int ret=0;
+
     if (semDown (semgid, sh->mutex) == -1)  {                        /* enter critical region */
         perror ("error on the up operation for semaphore access (WT)");
         exit (EXIT_FAILURE);
@@ -200,8 +201,12 @@ static void informChef ()
     }
 
     /* insert your code here */
+
     sh->fSt.st.waiterStat = INFORM_CHEF;
     saveState(nFic, &(sh->fSt));
+
+    sh->fSt.foodRequest = 0; // Resets the flag foodRequest to 0 (??)
+
 
     if (semUp (semgid, sh->mutex) == -1)                                                   /* exit critical region */
     { perror ("error on the down operation for semaphore access (WT)");
@@ -227,6 +232,8 @@ static void takeFoodToTable ()
     }
 
     /* insert your code here */
+    sh->fSt.st.waiterStat = TAKE_TO_TABLE;
+    saveState(nFic, &(sh->fSt));
     
     if (semUp (semgid, sh->mutex) == -1)  {                                                  /* exit critical region */
      perror ("error on the down operation for semaphore access (WT)");
@@ -249,6 +256,8 @@ static void receivePayment ()
     }
 
     /* insert your code here */
+    sh->fSt.st.waiterStat = RECEIVE_PAYMENT;
+    saveState(nFic, &(sh->fSt));
 
     if (semUp (semgid, sh->mutex) == -1)  {                                                  /* exit critical region */
      perror ("error on the down operation for semaphore access (WT)");

@@ -10,6 +10,7 @@
  *     \li writing the present full state as a single line at the end of the file.
  *
  *  \author Nuno Lau - December 2022
+ *  
  */
 
 #include <stdio.h>
