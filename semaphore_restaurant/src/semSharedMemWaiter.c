@@ -201,11 +201,10 @@ static void informChef ()
     }
 
     /* insert your code here */
-
     sh->fSt.st.waiterStat = INFORM_CHEF;
-    sh->fSt.foodOrder++;  // Increments the foodOrder
     saveState(nFic, &(sh->fSt));
-    sh->fSt.foodRequest = 0; // Resets the flag foodRequest to 0 (??)
+    semUp(semgid, sh->waitOrder);
+
 
     if (semUp (semgid, sh->mutex) == -1)                                                   /* exit critical region */
     { perror ("error on the down operation for semaphore access (WT)");
@@ -213,7 +212,8 @@ static void informChef ()
     }
 
     /* insert your code here */
-    semUp(semgid,sh->waitOrder); // Wakes up the chef
+    semDown(semgid, sh->waiterRequest);  // Wait for chef to finish cooking
+
 
 }
 
@@ -232,6 +232,7 @@ static void takeFoodToTable ()
     }
 
     /* insert your code here */
+    printf("%d\n", sh->fSt.foodReady);
     if(sh->fSt.foodReady == 1)  // If chef has finished cooking
     {
         sh->fSt.st.waiterStat = TAKE_TO_TABLE;

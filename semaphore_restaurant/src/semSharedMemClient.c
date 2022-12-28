@@ -243,11 +243,7 @@ static void orderFood (int id)
     }
 
     /* insert your code here */
-
-    if (id == sh->fSt.tableFirst)  // Verifica se é o id do primeiro cliente
-    {
-        semDown(semgid, sh->waiterRequest); 
-    }
+    semDown(semgid, sh->waiterRequest); 
     
 }
 
@@ -278,16 +274,6 @@ static void waitFood (int id)
     }
 
     /* insert your code here */
-    if(id != sh->fSt.tableLast)
-    {
-        semDown(semgid, sh->foodArrived); // Adormecer os clientes
-    } 
-
-    if (id == sh->fSt.tableLast) // Se for o último cliente
-    {
-        for (int i = 0 ; i < TABLESIZE - 1 ; i++)
-            semUp(semgid, sh->foodArrived);  // Desbloquear os clientes  
-    }
     
     if (semDown (semgid, sh->mutex) == -1) {                                                  /* enter critical region */
         perror ("error on the down operation for semaphore access (CT)");
@@ -295,12 +281,6 @@ static void waitFood (int id)
     }
 
     /* insert your code here */
-    if(sh->fSt.st.waiterStat == TAKE_TO_TABLE)
-    {
-        sh->fSt.st.clientStat[id] = EAT;
-        saveState(nFic,&(sh->fSt));
-    }
-
     
     if (semUp (semgid, sh->mutex) == -1) {                                                  /* exit critical region */
         perror ("error on the down operation for semaphore access (CT)");
