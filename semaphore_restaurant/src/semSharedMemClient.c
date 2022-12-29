@@ -330,7 +330,7 @@ static void waitAndPay (int id)
         }
 
         /* insert your code here */
-        semUp(semgid, sh->waiterRequest);  
+        semDown(semgid, sh->waiterRequest);  
         sh->fSt.paymentRequest++;  
         saveState(nFic,&(sh->fSt));
 
