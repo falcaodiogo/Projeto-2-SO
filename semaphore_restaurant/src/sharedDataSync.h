@@ -35,7 +35,7 @@ typedef struct
           /** \brief identification of semaphore used by client to wait for waiter after a request - val = 0 */
           unsigned int requestReceived;
           /** \brief identification of semaphore used by clients to wait for food - val = 0 */
-          unsigned int foodArrived;
+          unsigned int foodArrived; //  cada cliente dá down e waiter vai dar up 20x
           /** \brief identification of semaphore used by clients to wait for friends to finish eating - val = 0  */
           unsigned int allFinished;
           /** \brief identification of semaphore used by waiter to wait for requests - val = 0  */
