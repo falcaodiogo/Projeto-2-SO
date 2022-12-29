@@ -253,8 +253,7 @@ static void orderFood (int id)
  *  The client updates its state, and waits until food arrives. 
  *  It should also update state after food arrives.
  *  The internal state should be saved twice.
- *
- *  \param id client id
+ * 
  */
 static void waitFood (int id)
 {
@@ -265,7 +264,7 @@ static void waitFood (int id)
     }
 
     /* insert your code here */
-    sh->fSt.st.clientStat[id] = WAIT_FOR_FOOD; 
+    sh->fSt.st.clientStat[id] = WAIT_FOR_FOOD;  // Update the state of the client to Wait_for_food
     saveState(nFic,&(sh->fSt));
 
     if (semUp (semgid, sh->mutex) == -1) {                                                  /* exit critical region */
@@ -274,6 +273,7 @@ static void waitFood (int id)
     }
 
     /* insert your code here */
+    semDown(semgid,sh->foodArrived);  // Wait for food to arrive
     
     if (semDown (semgid, sh->mutex) == -1) {                                                  /* enter critical region */
         perror ("error on the down operation for semaphore access (CT)");
@@ -281,6 +281,8 @@ static void waitFood (int id)
     }
 
     /* insert your code here */
+    sh->fSt.st.clientStat[id] = EAT;  // Update the state of the client to EAT
+    saveState(nFic,&(sh->fSt));
     
     if (semUp (semgid, sh->mutex) == -1) {                                                  /* exit critical region */
         perror ("error on the down operation for semaphore access (CT)");

@@ -147,6 +147,8 @@ static void processOrder ()
 {
     usleep((unsigned int) floor ((MAXCOOK * random ()) / RAND_MAX + 100.0));
 
+
+
     if (semDown (semgid, sh->mutex) == -1) {                                                      /* enter critical region */
         perror ("error on the up operation for semaphore access (PT)");
         exit (EXIT_FAILURE);
@@ -163,15 +165,12 @@ static void processOrder ()
     }
 
     /* insert your code here */
-    printf("The chef has finished cooking and is now resting\n");
-    if(sh->fSt.foodReady)
-    {
-        if (semUp (semgid, sh->waiterRequest) == -1) {                                                      /* exit critical region */
-            perror ("error on the up operation for semaphore access (PT)");
-            exit (EXIT_FAILURE);
-        }
-        sh->fSt.st.chefStat = REST;
-        saveState(nFic,&(sh->fSt));
+    sh->fSt.st.chefStat = REST;
+    saveState(nFic,&(sh->fSt));
+
+    if (semUp (semgid, sh->waiterRequest) == -1) {                                                      /* exit critical region */
+        perror ("error on the up operation for semaphore access (PT)");
+        exit (EXIT_FAILURE);
     }
 }
 
