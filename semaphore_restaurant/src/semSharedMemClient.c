@@ -331,7 +331,7 @@ static void waitAndPay (int id)
     }
 
 
-    if (semUp (semgid, sh->mutex) == -1) {                                                  /* enter critical region */
+    if (semUp (semgid, sh->mutex) == -1) {                                                  /* exit critical region */
         perror ("error on the down operation for semaphore access (CT)");
         exit (EXIT_FAILURE);
     }
@@ -352,7 +352,7 @@ static void waitAndPay (int id)
         saveState(nFic,&(sh->fSt));
         sh->fSt.paymentRequest = 1;  
 
-        if (semUp (semgid, sh->mutex) == -1) {                                                  /* enter critical region */
+        if (semUp (semgid, sh->mutex) == -1) {                                                  /* exit critical region */
             perror ("error on the down operation for semaphore access (CT)");
             exit (EXIT_FAILURE);
         }
@@ -371,7 +371,7 @@ static void waitAndPay (int id)
     sh->fSt.st.clientStat[id] = FINISHED;
     saveState(nFic,&(sh->fSt));
 
-    if (semUp (semgid, sh->mutex) == -1) {                                                  /* enter critical region */
+    if (semUp (semgid, sh->mutex) == -1) {                                                  /* exit critical region */
         perror ("error on the down operation for semaphore access (CT)");
         exit (EXIT_FAILURE);
     }

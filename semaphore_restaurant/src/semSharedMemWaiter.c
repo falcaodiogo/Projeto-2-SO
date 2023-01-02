@@ -242,9 +242,9 @@ static void takeFoodToTable ()
     saveState(nFic, &(sh->fSt));
     
     for (int i = 0 ; i < TABLESIZE ; i++) 
-        semUp(semgid, sh->foodArrived);  // Allow the meal to start
+        semUp(semgid, sh->foodArrived);  // Acorda os clientes que estao a espera de comida
     
-    semUp(semgid, sh->requestReceived);  // Allow the client to leave the table (if he wants to
+    semUp(semgid, sh->requestReceived); 
     
     if (semUp (semgid, sh->mutex) == -1)  {                                                  /* exit critical region */
      perror ("error on the down operation for semaphore access (WT)");
